@@ -1,0 +1,111 @@
+// it is expandble and narrowing also possible and same as Array first 
+package dsa;
+
+public class DynArray {
+    public static void main(String[] args) {
+
+
+    DynArray2 drr= new DynArray2(1);
+    drr.append(10);
+    drr.append(20);
+    drr.append(30);
+drr.edit(50,100);
+    System.out.println(drr.getCapacity());
+    System.out.println(drr.count());
+}
+}
+class DynArray2{
+    private  int lastIndex;
+    private int[]ptr;
+    public DynArray2(){
+        lastIndex=-1;
+    }
+    public DynArray2(int size){
+        lastIndex=-1;
+        ptr=new int[size];
+    }
+    void doubleArray(){
+        int [] tem=new int[ptr.length*2];
+        for (int i=0;i<=lastIndex;i++){
+            tem[i]=ptr[i];
+        }
+        ptr=tem;
+    }
+    void halfArray(){
+        int [] tem=new int[ptr.length/2];
+        for (int i=0;i<=lastIndex;i++){
+            tem[i]=ptr[i];
+        }
+        ptr=tem;
+    }
+    public boolean isFull(){
+        return lastIndex+1==ptr.length;
+    }
+    public boolean isEmpty(){
+        return lastIndex==-1;
+    }
+    public void append(int data){
+        if(isFull()){
+            doubleArray();
+        }
+        ptr[lastIndex+1]=data;
+        lastIndex++;
+    }
+    public void insert(int index,int data){
+        try{
+            if(index<0 || index > lastIndex+1)
+                throw new ArrayIndexOutOfBoundsException("Invalid index");
+            if (isFull()){
+                doubleArray();
+            }
+            for (int i=lastIndex;i>= index;i--){
+                ptr[i+1]=ptr[i];
+            }
+            ptr[index]=data;
+            lastIndex++;
+        }catch (ArrayIndexOutOfBoundsException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public void edit(int index, int newData){
+        try{
+            if (index < 0 || index > lastIndex + 1)
+                throw new ArrayIndexOutOfBoundsException("Invalid Index");
+            ptr[index]=newData;
+        }
+        catch(ArrayIndexOutOfBoundsException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public void delete(int index){
+        try{
+            if (index<0 || index>lastIndex+1)
+                throw new ArrayIndexOutOfBoundsException( " invalid Index");
+            for (int i=index;i<lastIndex;i++){
+                ptr[i]=ptr[i+1];
+            }
+            lastIndex--;
+            if(ptr.length>1 && lastIndex+1==ptr.length/2)
+                halfArray();
+        } catch(ArrayIndexOutOfBoundsException e){
+            System.out.println(e.getMessage());
+        }
+    }
+    public int count(){
+        return lastIndex+1;
+    }
+    public int getValue(int index){
+        try{
+            if(index<0 || index>lastIndex+1){
+                throw new ArrayIndexOutOfBoundsException("Invalid index");
+            }
+            return ptr[index];
+        } catch(ArrayIndexOutOfBoundsException e){
+            System.out.println(e.getMessage());
+        }
+        return 0;
+    }
+    int getCapacity(){
+        return ptr.length;
+    }
+}
